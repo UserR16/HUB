@@ -1,0 +1,272 @@
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/UserR16/Script/refs/heads/main/CooperateWithMyFriendDoingUI"))()
+local Window = Library:CreateWindow({
+    Name = "GAME WITH EVIL", 
+    ToggleKey = Enum.KeyCode.RightControl,
+    KeySystem = false,
+    Key = "key123"
+})
+
+local Tabs = {
+Quest = Window:CreateTab("Quest"),
+Players = Window:CreateTab("Players"),
+Visual = Windown:CreateTab("Visual")
+}
+  
+local SubTab = Tabs.Quest:CreateSubTab("Electrical Box")
+
+local Section = SubTab:AddSection("Electrical Box", false)
+Section:AddToggle({Text = "Auto Electrical Box", Callback = function(v)
+_G.AutoElectricalBox = v
+game:GetService("RunService").Stepped:Connect(function()
+if _G.AutoElectricalBox then
+local activeObjs = game:GetService("Workspace"):FindFirstChild("Live") and game:GetService("Workspace").Live:FindFirstChild("Map") and game:GetService("Workspace").Live.Map:FindFirstChild("MapModel") and game:GetService("Workspace").Live.Map.MapModel:FindFirstChild("ActiveObjectives")
+if activeObjs and activeObjs:FindFirstChild("Electrical") then
+for _,v in ipairs(activeObjs.Electrical:GetChildren()) do
+if v.Parent.Name == "Electrical" and v.Name == "ElectricalBox" then
+local remote = v:FindFirstChild("Remote")
+if remote then remote:FireServer() end
+end
+end
+end
+end
+end)
+end})
+local SubTab = Tabs.Quest:CreateSubTab("Generators")
+
+local Section = SubTab:AddSection("Generators", false)
+Section:AddDropdown({Text = "Mode", List = {"Good", "Perfect"}, Multi = false, Callback = function(v)
+_G.ModeGen = v
+end})
+Section:AddToggle({Text = "Auto Generator", Callback = function(v)
+_G.AutoGen = v
+game:GetService("RunService").Stepped:Connect(function()
+if _G.AutoGen then
+local activeObjs = game:GetService("Workspace"):FindFirstChild("Live") and game:GetService("Workspace").Live:FindFirstChild("Map") and game:GetService("Workspace").Live.Map:FindFirstChild("MapModel") and game:GetService("Workspace").Live.Map.MapModel:FindFirstChild("ActiveObjectives")
+if activeObjs and activeObjs:FindFirstChild("Generators") then
+for _,v in ipairs(activeObjs.Generators:GetChildren()) do
+if v.Parent.Name == "Generators" and v.Name == "Generator" then
+local remote = v:FindFirstChild("Remote")
+if remote then remote:FireServer(_G.ModeGen == "Perfect" and 2 or 1) end
+end
+end
+end
+end
+end)
+end})
+local SubTab = Tabs.Quest:CreateSubTab("Pages")
+
+local Section = SubTab:AddSection("Pages", false)
+Section:AddToggle({Text = "Auto Pages", Callback = function(v)
+_G.AutoPages = v
+game:GetService("RunService").Stepped:Connect(function()
+if _G.AutoPages then
+local activeObjs = game:GetService("Workspace"):FindFirstChild("Live") and game:GetService("Workspace").Live:FindFirstChild("Map") and game:GetService("Workspace").Live.Map:FindFirstChild("MapModel") and game:GetService("Workspace").Live.Map.MapModel:FindFirstChild("ActiveObjectives")
+if activeObjs and activeObjs:FindFirstChild("Pages") then
+for _,v in ipairs(activeObjs.Pages:GetChildren()) do
+if v.Parent.Name == "Pages" and v.Name == "PageModel" then
+local prompt = v:FindFirstChild("Paper") and v:FindFirstChild("Paper"):FindFirstChild("Attachment") and v:FindFirstChild("Paper"):FindFirstChild("Attachment"):FindFirstChildWhichIsA("ProximityPrompt")
+if prompt then fireproximityprompt(prompt) end
+end
+end
+end
+end
+end)
+end})
+local SubTab = Tabs.Quest:CreateSubTab("Bluetooth")
+
+local Section = SubTab:AddSection("Bluetooth", false)
+Section:AddToggle({Text = "Auto Bluetooth", Callback = function(v)
+_G.AutoBluetooth = v
+game:GetService("RunService").Stepped:Connect(function()
+if _G.AutoBluetooth then
+local activeObjs = game:GetService("Workspace"):FindFirstChild("Live") and game:GetService("Workspace").Live:FindFirstChild("Map") and game:GetService("Workspace").Live.Map:FindFirstChild("MapModel") and game:GetService("Workspace").Live.Map.MapModel:FindFirstChild("ActiveObjectives")
+if activeObjs and activeObjs:FindFirstChild("Bluetooth") then
+for _,v in ipairs(activeObjs.Bluetooth:GetChildren()) do
+if v.Parent.Name == "Bluetooth" and v.Name == "BluetoothDevice" then
+local remote = v:FindFirstChild("Remote")
+if remote then remote:FireServer() end
+end
+end
+end
+end
+end)
+end})
+local SubTab = Tabs.Players:CreateSubTab("Players")
+
+local Section = SubTab:AddSection("Players", false)
+Section:AddToggle({Text = "Infinity Stamina", Callback = function(v)
+_G.InfStamina = v
+game:GetService("RunService").Stepped:Connect(function()
+if _G.InfStamina then
+local char = game:GetService("Players").LocalPlayer.Character
+if char then
+char:SetAttribute("MaxStamina",9e9)
+char:SetAttribute("Stamina",9e9)
+char:SetAttribute("StaminaGain",9e9)
+end
+end
+end)
+end})
+Section:AddToggle({Text = "Always Run", Callback = function(v)
+_G.AlwaysRun = v
+game:GetService("RunService").Stepped:Connect(function()
+if _G.AlwaysRun then
+local char = game:GetService("Players").LocalPlayer.Character
+if char then
+char.Humanoid.WalkSpeed = 35
+end
+end
+end)
+end})
+local SubTab = Tabs.Visual:CreateSubTab("Lighting")
+
+local Section = SubTab:AddSection("Lighting", false)
+Section:AddToggle({Text = "Fullbright", Callback = function(v)
+_G.fb = v
+game:GetService("RunService").Stepped:Connect(function()
+local lighting = game:GetService("Lighting")
+if _G.fb then
+lighting.GlobalShadows = false
+lighting.OutdoorAmbient = Color3.new(1,1,1)
+else
+lighting.GlobalShadows = true
+lighting.OutdoorAmbient = Color3.fromRGB(33,33,33)
+end
+end)
+end})
+Section:AddToggle({Text = "Remove Fog", Callback = function(v)
+_G.NoFog = v
+game:GetService("RunService").RenderStepped:Connect(function()
+if not game.Lighting:GetAttribute("FogStart") then game.Lighting:SetAttribute("FogStart", game.Lighting.FogStart) end
+if not game.Lighting:GetAttribute("FogEnd") then game.Lighting:SetAttribute("FogEnd", game.Lighting.FogEnd) end
+game.Lighting.FogStart = _G.NoFog and 0 or game.Lighting:GetAttribute("FogStart")
+game.Lighting.FogEnd = _G.NoFog and math.huge or game.Lighting:GetAttribute("FogEnd")
+local fog = game.Lighting:FindFirstChildOfClass("Atmosphere")
+if fog then
+if not fog:GetAttribute("Density") then fog:SetAttribute("Density", fog.Density) end
+fog.Density = _G.NoFog and 0 or fog:GetAttribute("Density")
+end
+end)
+end})
+local SubTab = Tabs.Players:CreateSubTab("ESP")
+
+local Section = SubTab:AddSection("ESP", false)
+Section:AddToggle({Text = "Electrical Box ESP", Callback = function(v)
+_G.eb_esp = v
+if _G.eb_esp then
+eb_esp = game:GetService("RunService").Stepped:Connect(function()
+local activeObjs = game:GetService("Workspace"):FindFirstChild("Live") and game:GetService("Workspace").Live:FindFirstChild("Map") and game:GetService("Workspace").Live.Map:FindFirstChild("MapModel") and game:GetService("Workspace").Live.Map.MapModel:FindFirstChild("ActiveObjectives")
+if activeObjs and activeObjs:FindFirstChild("Electrical") then
+for _,v in ipairs(activeObjs.Electrical:GetChildren()) do
+if v.Parent.Name == "Electrical" and v.Name == "ElectricalBox" and not v:FindFirstChild("eb_esp") then
+esp:AddESP(v, "Electrical Box", Color3.new(0,1,1), 15, 'eb_esp')
+end
+end
+end
+end)
+else
+if eb_esp then eb_esp:Disconnect() esp:Delete("eb_esp") end
+end
+end})
+Section:AddToggle({Text = "Bluetooth ESP", Callback = function(v)
+_G.b_esp = v
+if _G.b_esp then
+b_esp = game:GetService("RunService").Stepped:Connect(function()
+local activeObjs = game:GetService("Workspace"):FindFirstChild("Live") and game:GetService("Workspace").Live:FindFirstChild("Map") and game:GetService("Workspace").Live.Map:FindFirstChild("MapModel") and game:GetService("Workspace").Live.Map.MapModel:FindFirstChild("ActiveObjectives")
+if activeObjs and activeObjs:FindFirstChild("Bluetooth") then
+for _,v in ipairs(activeObjs.Bluetooth:GetChildren()) do
+if v.Parent.Name == "Bluetooth" and v.Name == "BluetoothDevice" and not v:FindFirstChild("b_esp") then
+esp:AddESP(v, "Bluetooth", Color3.fromRGB(70,70,70), 15, 'b_esp')
+end
+end
+end
+end)
+else
+if b_esp then b_esp:Disconnect() esp:Delete("b_esp") end
+end
+end})
+Section:AddToggle({Text = "Pages ESP", Callback = function(v)
+_G.p_esp = v
+if _G.p_esp then
+_G.p_esp_connection = game:GetService("RunService").Stepped:Connect(function()
+local live = workspace:FindFirstChild("Live")
+local activeObjs = live and live:FindFirstChild("Map") and live.Map:FindFirstChild("MapModel") and live.Map.MapModel:FindFirstChild("ActiveObjectives")
+if activeObjs and activeObjs:FindFirstChild("Pages") then
+for _, v in ipairs(activeObjs.Pages:GetChildren()) do
+if v.Name == "PageModel" and v:FindFirstChild("Paper") and not v:FindFirstChild("p_esp") then
+esp:AddESP(v, "Hidden", Color3.new(1,1,1), 15, 'p_esp')
+end
+end
+end
+end)
+else
+if _G.p_esp_connection then
+_G.p_esp_connection:Disconnect()
+esp:Delete("p_esp")
+end
+end
+end})
+Section:AddToggle({Text = "Generators ESP", Callback = function(v)
+_G.g_esp = v
+if _G.g_esp then
+g_esp = game:GetService("RunService").Stepped:Connect(function()
+local activeObjs = game:GetService("Workspace"):FindFirstChild("Live") and game:GetService("Workspace").Live:FindFirstChild("Map") and game:GetService("Workspace").Live.Map:FindFirstChild("MapModel") and game:GetService("Workspace").Live.Map.MapModel:FindFirstChild("ActiveObjectives")
+if activeObjs and activeObjs:FindFirstChild("Generators") then
+for _,v in ipairs(activeObjs.Generators:GetChildren()) do
+if v.Parent.Name == "Generators" and v.Name == "Generator" and not v:FindFirstChild("g_esp") then
+esp:AddESP(v, "Generator", Color3.new(0,0,1), 15, 'g_esp')
+end
+end
+end
+end)
+else
+if g_esp then g_esp:Disconnect() esp:Delete("g_esp") end
+end
+end})
+Section:AddToggle({Text = "Killers ESP", Callback = function(v)
+_G.k_esp = v
+if _G.k_esp then
+k_esp = game:GetService("RunService").Stepped:Connect(function()
+for _,v in ipairs(game:GetService("Workspace"):GetChildren()) do
+if v:IsA("Model") and v:FindFirstChild("KillerConfig") and not v:FindFirstChild("k_esp") then
+esp:AddESP(v, v.Name, Color3.new(1), 15, 'k_esp')
+end
+end
+end)
+else
+if k_esp then k_esp:Disconnect() esp:Delete("k_esp") end
+end
+end})
+Section:AddToggle({Text = "Survivors ESP", Callback = function(v)
+_G.s_esp = v
+if _G.s_esp then
+s_esp = game:GetService("RunService").Stepped:Connect(function()
+for _,v in ipairs(game:GetService("Workspace"):GetChildren()) do
+if v:IsA("Model") and not v:FindFirstChild("KillerConfig") and not v:FindFirstChild("s_esp") then
+if game:GetService("Players"):GetPlayerFromCharacter(v) ~= game:GetService("Players").LocalPlayer then
+esp:AddESP(v, v.Name, Color3.fromRGB(0,255,100), 15, 's_esp')
+end
+end
+end
+end)
+else
+if s_esp then s_esp:Disconnect() esp:Delete('s_esp") end
+end
+end})
+local Section = SubTab:AddSection("Setting ESP", false)
+Section:AddToggle({
+  Name = "Distance ESP",
+  Callback = function(v)
+getgenv().DistanceESP = v
+end})
+Section:AddToggle({
+  Name = "Rainbow ESP",
+  Callback = function(v)
+getgenv().RainbowESP = v
+end})
+--[[
+Sec:AddInput({Text = "User Name", Default = "Player", Callback = function(v) print("Input: " .. v) end})
+Sec:AddToggle({Text = "Auto Farm", Callback = function(v) print("Toggle: ", v) end})
+Sec:AddSlider({Text = "WalkSpeed", Min = 16, Max = 200, Default = 16, Callback = function(v) LP.Character.Humanoid.WalkSpeed = v end})
+Sec:AddDropdown({Text = "Select World", List = {"Sea 1", "Sea 2", "Sea 3"}, Multi = false, Callback = function(v) print("World: " .. v) end})
+Sec:AddButton({Text = "Force Save Config", Callback = function() print("Saved manually!") end})]]--
