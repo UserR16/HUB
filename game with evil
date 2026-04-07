@@ -11,7 +11,9 @@ Quest = Window:CreateTab("Quest"),
 Players = Window:CreateTab("Players"),
 Visual = Windown:CreateTab("Visual")
 }
-  
+
+local esp = loadstring(game:HttpGet("https://raw.githubusercontent.com/ImamGV/Script/refs/heads/main/ESP"))()
+
 local SubTab = Tabs.Quest:CreateSubTab("Electrical Box")
 
 local Section = SubTab:AddSection("Electrical Box", false)
