@@ -114,7 +114,9 @@ _G.AlwaysRun = v
 game:GetService("RunService").RenderStepped:Connect(function()
 if _G.AlwaysRun then
 local char = game:GetService("Players").LocalPlayer.Character
+if char then
 char.Humanoid.WalkSpeed = 35
+end
 end
 end)
 end})
@@ -255,7 +257,7 @@ end
 end})
 local Section = SubTab:AddSection("Setting ESP", false)
 Section:AddToggle({
-  Name = "Distance ESP",
+  Text = "Distance ESP",
   Callback = function(v)
 getgenv().DistanceESP = v
 end})
