@@ -9,7 +9,7 @@ local Window = Library:CreateWindow({
 local Tabs = {
 Quest = Window:CreateTab("Quest"),
 Players = Window:CreateTab("Players"),
-Visual = Windown:CreateTab("Visual")
+Visual = Window:CreateTab("Visual")
 }
 
 local esp = loadstring(game:HttpGet("https://raw.githubusercontent.com/ImamGV/Script/refs/heads/main/ESP"))()
@@ -111,12 +111,10 @@ end)
 end})
 Section:AddToggle({Text = "Always Run", Callback = function(v)
 _G.AlwaysRun = v
-game:GetService("RunService").Stepped:Connect(function()
+game:GetService("RunService").RenderStepped:Connect(function()
 if _G.AlwaysRun then
 local char = game:GetService("Players").LocalPlayer.Character
-if char then
 char.Humanoid.WalkSpeed = 35
-end
 end
 end)
 end})
@@ -252,7 +250,7 @@ end
 end
 end)
 else
-if s_esp then s_esp:Disconnect() esp:Delete('s_esp") end
+if s_esp then s_esp:Disconnect() esp:Delete("s_esp") end
 end
 end})
 local Section = SubTab:AddSection("Setting ESP", false)
@@ -260,11 +258,6 @@ Section:AddToggle({
   Name = "Distance ESP",
   Callback = function(v)
 getgenv().DistanceESP = v
-end})
-Section:AddToggle({
-  Name = "Rainbow ESP",
-  Callback = function(v)
-getgenv().RainbowESP = v
 end})
 --[[
 Sec:AddInput({Text = "User Name", Default = "Player", Callback = function(v) print("Input: " .. v) end})
